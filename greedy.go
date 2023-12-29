@@ -9,13 +9,11 @@ func greedy(start tile, target tile, w world) []tile {
 	frontier := make(PriorityQueue, 0)
 	heap.Init(&frontier)
 
-	itemMap := make(map[tile]*Entry)
 	startItem := &Entry{
 		value:    start,
 		priority: 0,
 	}
 	heap.Push(&frontier, startItem)
-	itemMap[start] = startItem
 
 	cameFrom := make(map[tile]tile)
 	cameFrom[start] = start
@@ -30,15 +28,9 @@ func greedy(start tile, target tile, w world) []tile {
 
 		for _, next := range neighbors(current, w) {
 			if _, ok := cameFrom[next]; !ok {
-				cameFrom[next] = current
 				priority := heuristic(next, target)
-				if nextItem, ok := itemMap[next]; ok {
-					frontier.UpdateItem(nextItem, next, priority)
-				} else {
-					nextItem = &Entry{value: next, priority: priority}
-					heap.Push(&frontier, nextItem)
-					itemMap[next] = nextItem
-				}
+				heap.Push(&frontier, &Entry{value: next, priority: priority})
+				cameFrom[next] = current
 			}
 		}
 	}

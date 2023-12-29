@@ -10,13 +10,11 @@ func dijkstra(start tile, target tile, w world) []tile {
 	frontier := make(PriorityQueue, 0)
 	heap.Init(&frontier)
 
-	itemMap := make(map[tile]*Entry)
 	startItem := &Entry{
 		value:    start,
 		priority: 0,
 	}
 	heap.Push(&frontier, startItem)
-	itemMap[start] = startItem
 
 	cameFrom := make(map[tile]tile)
 	cameFrom[start] = start
@@ -36,15 +34,9 @@ func dijkstra(start tile, target tile, w world) []tile {
 			newCost := costSoFar[current] + next.value
 			if _, ok := costSoFar[next]; !ok || newCost < costSoFar[next] {
 				costSoFar[next] = newCost
+				priority := newCost
+				heap.Push(&frontier, &Entry{value: next, priority: priority})
 				cameFrom[next] = current
-
-				if nextItem, ok := itemMap[next]; ok {
-					frontier.UpdateItem(nextItem, next, newCost)
-				} else {
-					nextItem = &Entry{value: next, priority: newCost}
-					heap.Push(&frontier, nextItem)
-					itemMap[next] = nextItem
-				}
 			}
 		}
 	}
