@@ -2,15 +2,6 @@ package pathing
 
 import "slices"
 
-type tile struct {
-	row, col int
-	value    int
-}
-
-type world struct {
-	tiles [][]tile
-}
-
 func breadth(start tile, target tile, w world) []tile {
 	frontier := []tile{start}
 
