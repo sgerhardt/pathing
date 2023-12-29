@@ -2,12 +2,12 @@ package pathing
 
 import "container/heap"
 
-type PriorityQueue []*Item
+type PriorityQueue []*Entry
 
-type Item struct {
-	value    tile // The value of the item; arbitrary.
-	priority int  // The priority of the item in the queue.
-	index    int  // The index of the item in the heap.
+type Entry struct {
+	value    tile // The value of the entry; arbitrary.
+	priority int  // The priority of the entry in the queue.
+	index    int  // The index of the entry in the heap.
 }
 
 func (pq *PriorityQueue) Len() int { return len(*pq) }
@@ -27,7 +27,7 @@ func (pq *PriorityQueue) Swap(i, j int) {
 
 func (pq *PriorityQueue) Push(x interface{}) {
 	n := len(*pq)
-	item := x.(*Item)
+	item := x.(*Entry)
 	item.index = n
 	*pq = append(*pq, item)
 }
@@ -43,7 +43,7 @@ func (pq *PriorityQueue) Pop() interface{} {
 }
 
 // UpdateItem updates the priority of an item in the queue.
-func (pq *PriorityQueue) UpdateItem(item *Item, value tile, priority int) {
+func (pq *PriorityQueue) UpdateItem(item *Entry, value tile, priority int) {
 	item.value = value
 	item.priority = priority
 	heap.Fix(pq, item.index)

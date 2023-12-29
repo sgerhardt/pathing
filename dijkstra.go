@@ -10,8 +10,8 @@ func dijkstra(start tile, target tile, w world) []tile {
 	frontier := make(PriorityQueue, 0)
 	heap.Init(&frontier)
 
-	itemMap := make(map[tile]*Item)
-	startItem := &Item{
+	itemMap := make(map[tile]*Entry)
+	startItem := &Entry{
 		value:    start,
 		priority: 0,
 	}
@@ -25,7 +25,7 @@ func dijkstra(start tile, target tile, w world) []tile {
 	costSoFar[start] = 0
 
 	for frontier.Len() > 0 {
-		currentItem := heap.Pop(&frontier).(*Item)
+		currentItem := heap.Pop(&frontier).(*Entry)
 		current := currentItem.value
 
 		if current == target {
@@ -41,7 +41,7 @@ func dijkstra(start tile, target tile, w world) []tile {
 				if nextItem, ok := itemMap[next]; ok {
 					frontier.UpdateItem(nextItem, next, newCost)
 				} else {
-					nextItem = &Item{value: next, priority: newCost}
+					nextItem = &Entry{value: next, priority: newCost}
 					heap.Push(&frontier, nextItem)
 					itemMap[next] = nextItem
 				}
