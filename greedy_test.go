@@ -18,9 +18,10 @@ func Test_greedy(t *testing.T) {
 	forestWorld := populateWorld(t, forest)
 
 	tests := []struct {
-		name         string
-		args         args
-		expectedPath []tile
+		name                 string
+		args                 args
+		expectedPath         []tile
+		expectedNodesVisited int
 	}{
 		{
 			name: "greedy search simple",
@@ -38,6 +39,7 @@ func Test_greedy(t *testing.T) {
 				col:   1,
 				value: 4,
 			}},
+			expectedNodesVisited: 4,
 		},
 		{
 			name: "greedy search simple - no path",
@@ -46,7 +48,8 @@ func Test_greedy(t *testing.T) {
 				target: simpleWorld.tiles[0][0],
 				input:  simpleWorld,
 			},
-			expectedPath: nil,
+			expectedPath:         nil,
+			expectedNodesVisited: 1,
 		},
 		{
 			name: "greedy search intermediate",
@@ -68,6 +71,7 @@ func Test_greedy(t *testing.T) {
 				col:   1,
 				value: 8,
 			}},
+			expectedNodesVisited: 7,
 		},
 		{
 			name: "forest search intermediate - we go around the forest",
@@ -101,12 +105,14 @@ func Test_greedy(t *testing.T) {
 				col:   3,
 				value: 1,
 			}},
+			expectedNodesVisited: 11,
 		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			path := greedy(tt.args.start, tt.args.target, tt.args.input)
+			path, nodesVisited := greedy(tt.args.start, tt.args.target, tt.args.input)
 			assert.Equal(t, tt.expectedPath, path)
+			assert.Equal(t, tt.expectedNodesVisited, nodesVisited)
 		})
 	}
 }

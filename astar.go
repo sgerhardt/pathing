@@ -5,7 +5,7 @@ import (
 	"slices"
 )
 
-func astar(start tile, target tile, w world) []tile {
+func astar(start tile, target tile, w world) ([]tile, int) {
 	frontier := make(PriorityQueue, 0)
 	heap.Init(&frontier)
 
@@ -47,5 +47,5 @@ func astar(start tile, target tile, w world) []tile {
 		current = cameFrom[current]
 	}
 	slices.Reverse(path)
-	return path
+	return path, len(cameFrom)
 }

@@ -3,6 +3,9 @@ package pathing
 import "fmt"
 
 func printPath(w world, p []tile) {
+	if len(p) == 0 || len(w.tiles) == 0 {
+		return
+	}
 	for _, r := range w.tiles {
 		for _, c := range r {
 			if c.row == p[0].row && c.col == p[0].col {

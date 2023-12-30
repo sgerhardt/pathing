@@ -6,7 +6,7 @@ import (
 )
 
 // dijkstra algorithm with priority queue
-func dijkstra(start tile, target tile, w world) []tile {
+func dijkstra(start tile, target tile, w world) ([]tile, int) {
 	frontier := make(PriorityQueue, 0)
 	heap.Init(&frontier)
 
@@ -48,5 +48,5 @@ func dijkstra(start tile, target tile, w world) []tile {
 		current = cameFrom[current]
 	}
 	slices.Reverse(path)
-	return path
+	return path, len(cameFrom)
 }

@@ -6,9 +6,6 @@ import (
 	"testing"
 )
 
-//go:embed forest.txt
-var forest string
-
 func Test_dijkstra(t *testing.T) {
 	type args struct {
 		start  tile
@@ -21,9 +18,10 @@ func Test_dijkstra(t *testing.T) {
 	forestWorld := populateWorld(t, forest)
 
 	tests := []struct {
-		name         string
-		args         args
-		expectedPath []tile
+		name                 string
+		args                 args
+		expectedPath         []tile
+		expectedNodesVisited int
 	}{
 		{
 			name: "dijkstra search simple",
@@ -41,6 +39,7 @@ func Test_dijkstra(t *testing.T) {
 				col:   1,
 				value: 4,
 			}},
+			expectedNodesVisited: 4,
 		},
 		{
 			name: "dijkstra search simple - no path",
@@ -49,7 +48,8 @@ func Test_dijkstra(t *testing.T) {
 				target: simpleWorld.tiles[0][0],
 				input:  simpleWorld,
 			},
-			expectedPath: nil,
+			expectedPath:         nil,
+			expectedNodesVisited: 1,
 		},
 		{
 			name: "dijkstra search intermediate",
@@ -71,6 +71,7 @@ func Test_dijkstra(t *testing.T) {
 				col:   1,
 				value: 8,
 			}},
+			expectedNodesVisited: 9,
 		},
 		{
 			name: "forest search intermediate - we go around the forest",
@@ -104,12 +105,14 @@ func Test_dijkstra(t *testing.T) {
 				col:   3,
 				value: 1,
 			}},
+			expectedNodesVisited: 16,
 		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			path := dijkstra(tt.args.start, tt.args.target, tt.args.input)
+			path, nodesVisited := dijkstra(tt.args.start, tt.args.target, tt.args.input)
 			assert.Equal(t, tt.expectedPath, path)
+			assert.Equal(t, tt.expectedNodesVisited, nodesVisited)
 		})
 	}
 }

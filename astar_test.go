@@ -18,9 +18,10 @@ func Test_astar(t *testing.T) {
 	forestWorld := populateWorld(t, forest)
 
 	tests := []struct {
-		name         string
-		args         args
-		expectedPath []tile
+		name                 string
+		args                 args
+		expectedPath         []tile
+		expectedNodesVisited int
 	}{
 		{
 			name: "astar search simple",
@@ -38,6 +39,7 @@ func Test_astar(t *testing.T) {
 				col:   1,
 				value: 4,
 			}},
+			expectedNodesVisited: 4,
 		},
 		{
 			name: "astar search simple - no path",
@@ -46,7 +48,8 @@ func Test_astar(t *testing.T) {
 				target: simpleWorld.tiles[0][0],
 				input:  simpleWorld,
 			},
-			expectedPath: nil,
+			expectedPath:         nil,
+			expectedNodesVisited: 1,
 		},
 		{
 			name: "astar search intermediate",
@@ -68,6 +71,7 @@ func Test_astar(t *testing.T) {
 				col:   1,
 				value: 8,
 			}},
+			expectedNodesVisited: 9,
 		},
 		{
 			name: "astar search intermediate - we go around the forest",
@@ -101,12 +105,15 @@ func Test_astar(t *testing.T) {
 				col:   3,
 				value: 1,
 			}},
+			expectedNodesVisited: 16,
 		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			path := astar(tt.args.start, tt.args.target, tt.args.input)
+			path, nodesVisited := astar(tt.args.start, tt.args.target, tt.args.input)
 			assert.Equal(t, tt.expectedPath, path)
+			assert.Equal(t, tt.expectedNodesVisited, nodesVisited)
+			printPath(tt.args.input, path)
 		})
 	}
 }

@@ -2,7 +2,7 @@ package pathing
 
 import "slices"
 
-func breadth(start tile, target tile, w world) []tile {
+func breadth(start tile, target tile, w world) ([]tile, int) {
 	frontier := []tile{start}
 
 	cameFrom := make(map[tile]tile)
@@ -30,5 +30,5 @@ func breadth(start tile, target tile, w world) []tile {
 		current = cameFrom[current]
 	}
 	slices.Reverse(path)
-	return path
+	return path, len(cameFrom)
 }
